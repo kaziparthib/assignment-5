@@ -8,6 +8,7 @@ const allbtn =document.getElementById('all-btn')
 const openbtn =document.getElementById('open-btn')
 const closebtn =document.getElementById('closed-btn')
 const btntabs =document.getElementById('btn-tabs')
+const searchBtn=document.getElementById('search-btn')
 
 
 
@@ -15,21 +16,32 @@ function toggle(a){
   if(a=='all-btn'){
    
   allbtn.classList.remove('btn-outline');
+   openbtn.classList.remove('btn-primary')
   openbtn.classList.add('btn-outline');
   closebtn.classList.add('btn-outline');
+  closebtn.classList.remove('btn-primary')
   allbtn.classList.add('btn-primary');
   }else if(a=='open-btn'){
     allbtn.classList.remove('btn-primary')
     allbtn.classList.add('btn-outline');
   openbtn.classList.remove('btn-outline');
+  closebtn.classList.remove('btn-primary')
   closebtn.classList.add('btn-outline');
   openbtn.classList.add('btn-primary');
   }else if(a=='closed-btn'){
     allbtn.classList.remove('btn-primary')
     allbtn.classList.add('btn-outline');
   openbtn.classList.add('btn-outline');
+  openbtn.classList.remove('btn-primary')
   closebtn.classList.remove('btn-outline');
   closebtn.classList.add('btn-primary');
+  }else if(a=='search-btn'){
+    allbtn.classList.remove('btn-primary')
+    allbtn.classList.add('btn-outline')
+    openbtn.classList.remove('btn-primary')
+    openbtn.classList.add('btn-outline')
+    closebtn.classList.remove('btn-primary')
+    closebtn.classList.add('btn-outline')
   }
   
   
@@ -216,3 +228,24 @@ const displayIssues=(issues)=>{
   
   
   loadAllIssues()
+
+
+  
+  document.getElementById("search-btn").addEventListener("click", () => {
+    
+  const input = document.getElementById("input-search");
+  const searchValue = input.value.trim().toLowerCase();
+  console.log(searchValue);
+
+  fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchValue}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const searchIssues = data.data;
+      
+      const filterIssues = searchIssues.filter((a) =>
+        a.title.toLowerCase().includes(searchValue)
+      );
+
+      displayIssues(filterIssues);
+    });
+});
